@@ -8,7 +8,7 @@ const PuzzleGame = ({ imageUrl }) => {
   const [difficulty, setDifficulty] = useState("Medio");
   const [draggedPiece, setDraggedPiece] = useState(null);
 
-  const difficulties = { "Fácil": 2, "Medio": 3, "Difícil": 4, "Experto": 5, "Maestro": 6 };
+  const difficulties = { "Fácil": 3, "Medio": 4, "Difícil": 5, "Experto": 7, "Maestro": 8 };
   const completionMessages = {
     "Fácil": "¡Bien hecho! Has completado el rompecabezas con facilidad. 🎉",
     "Medio": "¡Excelente trabajo! Se notan tus habilidades. 🚀",
