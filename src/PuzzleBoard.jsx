@@ -29,9 +29,9 @@ const PuzzleBoard = () => {
   }, []);
 
   return (
-    <div style={{ maxWidth: "100%", margin: "0 auto", padding: "1rem" }}>
+    <div style={{ maxWidth: "100%", margin: "0 auto", padding: "1rem", textAlign: "center" }}>
       {isLoading ? (
-        <p style={{ textAlign: "center" }}>Cargando imágenes...</p>
+        <p>Cargando imágenes...</p>
       ) : (
         <Carousel showThumbs={false} showStatus={false} dynamicHeight>
           {images.map((img, index) => (
@@ -40,10 +40,12 @@ const PuzzleBoard = () => {
                 src={img}
                 alt={`Opción ${index + 1}`}
                 style={{
-                  width: "215px",
-                  height: "250px",
+                  width: "100%",
+                  maxWidth: "400px",
+                  height: "auto",
                   objectFit: "cover",
                   borderRadius: "10px",
+                  cursor: "pointer",
                 }}
               />
             </div>
@@ -52,7 +54,7 @@ const PuzzleBoard = () => {
       )}
 
       {selectedImage && (
-        <div style={{ textAlign: "center", marginTop: "1rem" }}>
+        <div style={{ marginTop: "1rem" }}>
           <h3>Rompecabezas</h3>
           <PuzzleGame imageUrl={selectedImage} />
         </div>

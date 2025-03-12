@@ -6,6 +6,7 @@ const PuzzleGame = ({ imageUrl }) => {
   const [containerSize, setContainerSize] = useState(300);
   const [isComplete, setIsComplete] = useState(false);
   const [difficulty, setDifficulty] = useState("Medio");
+  const [draggedPiece, setDraggedPiece] = useState(null);
 
   const difficulties = { "Fácil": 2, "Medio": 3, "Difícil": 4, "Experto": 5, "Maestro": 6 };
   const completionMessages = {
@@ -24,7 +25,7 @@ const PuzzleGame = ({ imageUrl }) => {
   }, [imageUrl, gridSize]);
 
   useEffect(() => {
-    const updateSize = () => setContainerSize(Math.min(window.innerWidth * 0.8, 500));
+    const updateSize = () => setContainerSize(Math.min(window.innerWidth * 0.9, 500));
     window.addEventListener("resize", updateSize);
     updateSize();
     return () => window.removeEventListener("resize", updateSize);
@@ -32,7 +33,6 @@ const PuzzleGame = ({ imageUrl }) => {
 
   const generatePuzzle = () => {
     let newPieces = [];
-
     for (let row = 0; row < gridSize; row++) {
       for (let col = 0; col < gridSize; col++) {
         newPieces.push({ id: `${row}-${col}`, row, col });
@@ -48,19 +48,31 @@ const PuzzleGame = ({ imageUrl }) => {
     return shuffled;
   };
 
-  const handleDragStart = (event, piece) => event.dataTransfer.setData("pieceId", piece.id);
+  const handleDragStart = (event, piece) => {
+    setDraggedPiece(piece);
+    event.dataTransfer && event.dataTransfer.setData("pieceId", piece.id);
+  };
 
   const handleDrop = (event, targetPiece) => {
     event.preventDefault();
-    const draggedPieceId = event.dataTransfer.getData("pieceId");
+    swapPieces(draggedPiece, targetPiece);
+  };
 
-    if (draggedPieceId !== targetPiece.id) {
+  const handleTouchStart = (piece) => {
+    setDraggedPiece(piece);
+  };
+
+  const handleTouchEnd = (targetPiece) => {
+    swapPieces(draggedPiece, targetPiece);
+  };
+
+  const swapPieces = (pieceA, pieceB) => {
+    if (pieceA && pieceB && pieceA.id !== pieceB.id) {
       setPieces((prev) => {
         const newPieces = [...prev];
-        const draggedIndex = newPieces.findIndex((p) => p.id === draggedPieceId);
-        const targetIndex = newPieces.findIndex((p) => p.id === targetPiece.id);
-        [newPieces[draggedIndex], newPieces[targetIndex]] = [newPieces[targetIndex], newPieces[draggedIndex]];
-
+        const indexA = newPieces.findIndex((p) => p.id === pieceA.id);
+        const indexB = newPieces.findIndex((p) => p.id === pieceB.id);
+        [newPieces[indexA], newPieces[indexB]] = [newPieces[indexB], newPieces[indexA]];
         if (isPuzzleSolved(newPieces)) setIsComplete(true);
         return newPieces;
       });
@@ -70,7 +82,7 @@ const PuzzleGame = ({ imageUrl }) => {
   const isPuzzleSolved = (piecesArray) => piecesArray.every((p, i) => p.id === `${Math.floor(i / gridSize)}-${i % gridSize}`);
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
+    <div style={{ textAlign: "center", padding: "20px", maxWidth: "100%" }}>
       <h3>Selecciona la dificultad</h3>
       <select onChange={(e) => { setGridSize(difficulties[e.target.value]); setDifficulty(e.target.value); }} style={{ padding: "5px", fontSize: "16px" }}>
         {Object.keys(difficulties).map((level) => <option key={level} value={level}>{level}</option>)}
@@ -80,11 +92,12 @@ const PuzzleGame = ({ imageUrl }) => {
         <div style={{
           display: "grid", gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
           gridTemplateRows: `repeat(${gridSize}, 1fr)`, gap: "2px", border: "2px solid black",
-          width: `${containerSize}px`, height: `${containerSize}px`, position: "relative"
+          width: `${containerSize}px`, height: `${containerSize}px`, maxWidth: "90vw", maxHeight: "90vw", position: "relative"
         }}>
           {pieces.map((piece) => (
             <div key={piece.id} draggable onDragStart={(event) => handleDragStart(event, piece)}
               onDragOver={(event) => event.preventDefault()} onDrop={(event) => handleDrop(event, piece)}
+              onTouchStart={() => handleTouchStart(piece)} onTouchEnd={() => handleTouchEnd(piece)}
               style={{
                 width: "100%", height: "100%",
                 backgroundImage: `url(${imageUrl})`,

@@ -1,23 +1,14 @@
-import { useState } from "react";
 import PuzzleBoard from "./PuzzleBoard";
 
 function App() {
-  const [difficulty, setDifficulty] = useState("medio");
-
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Juego de Rompecabezas</h1>
 
-      {/* Selector de dificultad */}
-      <label style={styles.label}>Selecciona la dificultad:</label>
-      <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} style={styles.select}>
-        <option value="facil">Fácil</option>
-        <option value="medio">Medio</option>
-        <option value="dificil">Difícil</option>
-      </select>
-
       {/* Componente del rompecabezas */}
-      <PuzzleBoard difficulty={difficulty} />
+      <div style={styles.boardContainer}>
+        <PuzzleBoard />
+      </div>
     </div>
   );
 }
@@ -26,25 +17,23 @@ function App() {
 const styles = {
   container: {
     textAlign: "center",
-    padding: "20px",
+    padding: "5%",
     backgroundColor: "#1E1E1E",
     color: "#FFF",
     minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   title: {
-    fontSize: "2rem",
+    fontSize: "clamp(1.5rem, 5vw, 2.5rem)", // Se ajusta según la pantalla
     marginBottom: "20px",
   },
-  label: {
-    fontSize: "1.2rem",
-    marginRight: "10px",
-  },
-  select: {
-    padding: "8px",
-    fontSize: "1rem",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    marginBottom: "20px",
+  boardContainer: {
+    width: "100%",
+    maxWidth: "600px", // Máximo tamaño en pantallas grandes
+    display: "flex",
+    justifyContent: "center",
   },
 };
 
