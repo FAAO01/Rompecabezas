@@ -58,8 +58,8 @@ const PuzzleBoard = () => {
 
 const styles = {
   container: {
-    width: "100%",
-    maxWidth: "600px",
+    width: "80%",
+    maxWidth: "500px",
     margin: "0 auto",
     padding: "1rem",
     textAlign: "center",
