@@ -83,6 +83,7 @@ const PuzzleGame = ({ imageUrl }) => {
 
   return (
     <div style={{ textAlign: "center", padding: "20px", maxWidth: "100%" }}>
+      <h3>Manten presionado y arrastra :) </h3>
       <h3>Selecciona la dificultad</h3>
       <select onChange={(e) => { setGridSize(difficulties[e.target.value]); setDifficulty(e.target.value); }} style={{ padding: "5px", fontSize: "16px" }}>
         {Object.keys(difficulties).map((level) => <option key={level} value={level}>{level}</option>)}
@@ -99,7 +100,7 @@ const PuzzleGame = ({ imageUrl }) => {
               onDragOver={(event) => event.preventDefault()} onDrop={(event) => handleDrop(event, piece)}
               onTouchStart={() => handleTouchStart(piece)} onTouchEnd={() => handleTouchEnd(piece)}
               style={{
-                width: "100%", height: "100%",
+                width: "102%", height: "102%",
                 backgroundImage: `url(${imageUrl})`,
                 backgroundSize: `${gridSize * 100}% ${gridSize * 100}%`,
                 backgroundPosition: `${(piece.col / (gridSize - 1)) * 100}% ${(piece.row / (gridSize - 1)) * 100}%`,

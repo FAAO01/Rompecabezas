@@ -4,6 +4,7 @@ function App() {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Juego de Rompecabezas</h1>
+      <h3>Selecciona la imagen y juega </h3>
 
       {/* Componente del rompecabezas */}
       <div style={styles.boardContainer}>
