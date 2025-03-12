@@ -29,7 +29,7 @@ const PuzzleBoard = () => {
   }, []);
 
   return (
-    <div style={{ maxWidth: "100%", margin: "0 auto", padding: "1rem", textAlign: "center" }}>
+    <div style={styles.container}>
       {isLoading ? (
         <p>Cargando imágenes...</p>
       ) : (
@@ -39,14 +39,7 @@ const PuzzleBoard = () => {
               <img
                 src={img}
                 alt={`Opción ${index + 1}`}
-                style={{
-                  width: "100%",
-                  maxWidth: "400px",
-                  height: "auto",
-                  objectFit: "cover",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                }}
+                style={styles.image}
               />
             </div>
           ))}
@@ -54,13 +47,38 @@ const PuzzleBoard = () => {
       )}
 
       {selectedImage && (
-        <div style={{ marginTop: "1rem" }}>
+        <div style={styles.puzzleContainer}>
           <h3>Rompecabezas</h3>
           <PuzzleGame imageUrl={selectedImage} />
         </div>
       )}
     </div>
   );
+};
+
+const styles = {
+  container: {
+    width: "100%",
+    maxWidth: "600px",
+    margin: "0 auto",
+    padding: "1rem",
+    textAlign: "center",
+  },
+  image: {
+    width: "100%",
+    maxWidth: "100%",
+    height: "auto",
+    objectFit: "cover",
+    borderRadius: "10px",
+    cursor: "pointer",
+  },
+  puzzleContainer: {
+    marginTop: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+  },
 };
 
 export default PuzzleBoard;
