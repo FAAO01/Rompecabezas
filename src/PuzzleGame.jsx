@@ -25,7 +25,10 @@ const PuzzleGame = ({ imageUrl }) => {
   }, [imageUrl, gridSize]);
 
   useEffect(() => {
-    const updateSize = () => setContainerSize(Math.min(window.innerWidth * 0.9, 500));
+    const updateSize = () => {
+      const size = Math.min(window.innerWidth * 0.9, window.innerHeight * 0.6, 500);
+      setContainerSize(size);
+    };
     window.addEventListener("resize", updateSize);
     updateSize();
     return () => window.removeEventListener("resize", updateSize);
@@ -50,7 +53,7 @@ const PuzzleGame = ({ imageUrl }) => {
 
   const handleDragStart = (event, piece) => {
     setDraggedPiece(piece);
-    event.dataTransfer && event.dataTransfer.setData("pieceId", piece.id);
+    event.dataTransfer.setData("pieceId", piece.id);
   };
 
   const handleDrop = (event, targetPiece) => {
@@ -83,37 +86,76 @@ const PuzzleGame = ({ imageUrl }) => {
 
   return (
     <div style={{ textAlign: "center", padding: "20px", maxWidth: "100%" }}>
-      <h3>Manten presionado y arrastra :) </h3>
+      <h3>Manten presionado y arrastra 🙂</h3>
       <h3>Selecciona la dificultad</h3>
-      <select onChange={(e) => { setGridSize(difficulties[e.target.value]); setDifficulty(e.target.value); }} style={{ padding: "5px", fontSize: "16px" }}>
-        {Object.keys(difficulties).map((level) => <option key={level} value={level}>{level}</option>)}
+      <select
+        onChange={(e) => {
+          setGridSize(difficulties[e.target.value]);
+          setDifficulty(e.target.value);
+        }}
+        style={{ padding: "5px", fontSize: "16px" }}
+      >
+        {Object.keys(difficulties).map((level) => (
+          <option key={level} value={level}>
+            {level}
+          </option>
+        ))}
       </select>
 
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "auto", width: "100%", marginTop: "20px" }}>
-        <div style={{
-          display: "grid", gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
-          gridTemplateRows: `repeat(${gridSize}, 1fr)`, gap: "2px", border: "2px solid black",
-          width: `${containerSize}px`, height: `${containerSize}px`, maxWidth: "90vw", maxHeight: "90vw", position: "relative"
-        }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+            gridTemplateRows: `repeat(${gridSize}, 1fr)`,
+            gap: "2px",
+            border: "2px solid black",
+            width: `${containerSize}px`,
+            height: `${containerSize}px`,
+            maxWidth: "90vw",
+            maxHeight: "90vh",
+            position: "relative",
+          }}
+        >
           {pieces.map((piece) => (
-            <div key={piece.id} draggable onDragStart={(event) => handleDragStart(event, piece)}
-              onDragOver={(event) => event.preventDefault()} onDrop={(event) => handleDrop(event, piece)}
-              onTouchStart={() => handleTouchStart(piece)} onTouchEnd={() => handleTouchEnd(piece)}
+            <div
+              key={piece.id}
+              draggable
+              onDragStart={(event) => handleDragStart(event, piece)}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => handleDrop(event, piece)}
+              onTouchStart={() => handleTouchStart(piece)}
+              onTouchEnd={() => handleTouchEnd(piece)}
               style={{
-                width: "102%", height: "102%",
+                width: "100%",
+                height: "100%",
                 backgroundImage: `url(${imageUrl})`,
                 backgroundSize: `${gridSize * 100}% ${gridSize * 100}%`,
                 backgroundPosition: `${(piece.col / (gridSize - 1)) * 100}% ${(piece.row / (gridSize - 1)) * 100}%`,
-                border: "1px solid black", cursor: "grab"
+                border: "1px solid black",
+                cursor: "grab",
+                touchAction: "none",
               }}
             ></div>
           ))}
         </div>
       </div>
 
-      {isComplete && <div style={{ marginTop: "20px", padding: "10px", backgroundColor: "#4CAF50", color: "white", fontSize: "18px", borderRadius: "10px", display: "inline-block" }}>
-        {completionMessages[difficulty]}
-      </div>}
+      {isComplete && (
+        <div
+          style={{
+            marginTop: "20px",
+            padding: "10px",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            fontSize: "18px",
+            borderRadius: "10px",
+            display: "inline-block",
+          }}
+        >
+          {completionMessages[difficulty]}
+        </div>
+      )}
     </div>
   );
 };
