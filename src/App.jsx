@@ -3,9 +3,7 @@ import PuzzleBoard from "./PuzzleBoard";
 function App() {
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Juego de Rompecabezas</h1>
-      <h3>Selecciona la imagen y juega </h3>
-
+      <h1 style={styles.title}>Rompecabezas</h1>
       {/* Componente del rompecabezas */}
       <div style={styles.boardContainer}>
         <PuzzleBoard />

@@ -9,17 +9,19 @@ const PuzzleBoard = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchImages = async () => {
       setIsLoading(true);
+      setError(null); // Limpiar el error al inicio de la carga
       try {
         const querySnapshot = await getDocs(collection(db, "imagenes"));
         const imagesArray = querySnapshot.docs.map((doc) => doc.data().url);
         setImages(imagesArray);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-        alert("Error al cargar las imágenes.");
+      } catch (err) {
+        console.error("Error fetching images:", err);
+        setError("Error al cargar las imágenes. Por favor, inténtalo de nuevo.");
       } finally {
         setIsLoading(false);
       }
@@ -32,13 +34,15 @@ const PuzzleBoard = () => {
     <div style={styles.container}>
       {isLoading ? (
         <p>Cargando imágenes...</p>
+      ) : error ? (
+        <p style={{ color: "red" }}>{error}</p>
       ) : (
         <Carousel showThumbs={false} showStatus={false} dynamicHeight>
           {images.map((img, index) => (
             <div key={index} onClick={() => setSelectedImage(img)}>
               <img
                 src={img}
-                alt={`Opción ${index + 1}`}
+                alt={`Opción ${index + 1}`} // Corrección aquí
                 style={styles.image}
               />
             </div>
